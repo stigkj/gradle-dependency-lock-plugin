@@ -29,7 +29,7 @@ To include, add the following to your build.gradle
 
 ### Tasks Provided
 
-Command line overrides via `-PdependencyLock.override` or `-PdependencyLock.overrideFile` will apply.
+Command line overrides can be specified via `-PdependencyLock.override` or `-PdependencyLock.overrideFile`.
 
 * generateLock - Generate a lock file into the build directory, any existing `dependency.lock` file will be ignored
 * saveLock - copies generated lock into the project directory
@@ -61,9 +61,9 @@ or
 
 * lockFile - Name of the file to read/write dependency locks, defaults to 'dependencies.lock'
 * configurations - Collection of the configuration names to read, defaults to 'testRuntime'. For java projects testRuntime is good since it extends compile, runtime, and testCompile.
-* includeTransitives - Boolean if true transitvie dependencies will be included in the lock
+* includeTransitives - Boolean which if true, transitive dependencies will be included in the lock
 
-Use the extension if you wish to configure. Each project where gradle-dependency-lock will have its own dependencyLock extension.
+Use the extension if you wish to configure a project where gradle-dependency-lock should have its own dependencyLock configuration.
 
     dependencyLock {
       lockFile = 'dependencies.lock'
@@ -76,11 +76,11 @@ Use the extension if you wish to configure. Each project where gradle-dependency
 *Properties*
 
 * commitMessage - Commit message to use.
-* shouldCreateTag - Boolean to tell the commitLock to create a tag, defaults to false.
-* tag - A 0 argument closure that returns a String. Needs to generate a unique tag name.
-* remoteRetries - Number of times to update from remote repository and retry commits.
+* shouldCreateTag - Boolean to tell the commitLock to create a tag; defaults to false.
+* tag - A zero argument closure that returns a String. Needs to generate a unique tag name.
+* remoteRetries - Number of times to retry updating from remote repository and retry commits.
 
-Use the following to configure. There will be only one commitDependencyLock extension attached to the rootProject in a multiproject.  
+Use the following to configure. There should be only one commitDependencyLock extension attached to the rootProject in a multiproject.  
 
     commitDependencyLock {
       message = 'Committing dependency lock files'
@@ -93,14 +93,13 @@ Use the following to configure. There will be only one commitDependencyLock exte
 
 *dependencyLock.lockFile*
 
-Allows the user to override the configured lockFile name via the command line.
+Allows the user to override the configured lock file name via the command line.
 
     ./gradlew -PdependencyLock.lockFile=<filename> <tasks>
 
 *dependencyLock.ignore*
 
-Allows the user to ignore any present lockFile and/or command line overrides falling back to standard gradle dependency
-resolution. Plugin checks for the existence of the property, any value will cause the fallback to standard.
+Allows the user to ignore any present lock file and/or command line overrides falling back to standard gradle dependency resolution. Plugin checks for the existence of the property; any value will cause the fallback to standard.
 
     ./gradlew -PdependencyLock.ignore=true <tasks>
 
@@ -118,9 +117,7 @@ Use generated lock files in the build directory instead of the locks in the proj
 
 *dependencyLock.overrideFile*
 
-Allows the user to specify a file of overrides. This file should be in the lock file format specified below in the Lock
-File Format section. These will override the locked values in the dependencies.lock file. They will be respected when
-running generateLock.
+Allows the user to specify a file with lock overrides. This file should be in the lock file format specified below in the Lock File Format section. These will override the values in the dependencies.lock file. They will be used when running generateLock.
 
     ./gradlew -PdependencyLock.overrideFile=override.lock <tasks>
 
@@ -142,7 +139,7 @@ Allows the user to override the commit message.
 
 *commitDependencyLock.tag*
 
-Allows the user to specify a String for the tagname. If present commitLock will tag the commit with the given String.
+Allows the user to specify a string for the tagname. If present commitLock will tag the commit with the given String.
 
     ./gradlew -PcommitDependencyLock.tag=mytag <tasks> commitLock
 
@@ -161,7 +158,7 @@ If a dependency version selection was influenced by a command line argument we a
       "<group0>:<artifact0>": { "locked": "<version0>", "requested": "<requestedVersion0>", "viaOverride": "<overrideVersion0>" }
     }
 
-If we include transitive dependencies.
+If we include transitive dependencies these will be included in the file.
 
     {
       "<directgroup>:<directartifact>": { "locked": "<directversion>", "requested": "<directrequested>" },
@@ -176,7 +173,7 @@ If we don't include all transitive dependencies we still need to include the tra
       "<mygroup>:<mypeer>": { "project": true }
     }
 
-And we document project dependencies.
+And we document project dependencies like this:
 
 If you have
 
